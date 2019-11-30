@@ -30,13 +30,16 @@ fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
 fun Canvas.drawBiBouncyLiDot(scale : Float, w : Float, size : Float, paint : Paint) {
     val sf : Float = scale.sinify()
     val sc : Float = scale.divideScale(1, 2)
+    val r : Float = size / rFactor
     for (j in 0..(parts - 1)) {
         save()
         scale(1f - 2 * j, 1f)
-        drawLine(0f, 0f, size * sf, 0f, paint)
+        if (scale > 0f) {
+            drawLine(0f, 0f, size * sf, 0f, paint)
+        }
         save()
-        translate(size, 0f)
-        drawCircle((w - size) * sc, 0f, size / rFactor, paint)
+        translate(size + r, 0f)
+        drawCircle((w - size) * sc, 0f, r, paint)
         restore()
         restore()
     }
