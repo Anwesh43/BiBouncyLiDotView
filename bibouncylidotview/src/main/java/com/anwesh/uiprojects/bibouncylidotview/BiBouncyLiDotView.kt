@@ -206,4 +206,13 @@ class BiBouncyLiDotView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity: Activity) : BiBouncyLiDotView {
+            val view : BiBouncyLiDotView = BiBouncyLiDotView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
