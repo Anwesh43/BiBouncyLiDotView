@@ -20,8 +20,38 @@ val foreColor : Int = Color.parseColor("#4CAF50")
 val scGap : Float = 0.02f
 val delay : Long = 20
 val backColor : Int = Color.parseColor("#BDBDBD")
+val rFactor : Float = 3.5f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawBiBouncyLiDot(scale : Float, w : Float, size : Float, paint : Paint) {
+    val sf : Float = scale.sinify()
+    val sc : Float = scale.divideScale(1, 2)
+    for (j in 0..(parts - 1)) {
+        save()
+        scale(1f - 2 * j, 1f)
+        drawLine(0f, 0f, size * sf, 0f, paint)
+        save()
+        translate(size, 0f)
+        drawCircle((w - size) * sc, 0f, size / rFactor, paint)
+        restore()
+        restore()
+    }
+}
+
+fun Canvas.drawBBLDNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    paint.color = foreColor
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    save()
+    translate(w / 2, gap * (i + 1))
+    drawBiBouncyLiDot(scale, w / 2, size, paint)
+    restore()
+}
